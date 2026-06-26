@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Comunicación de Servidores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔗 Monitor de Comunicación de Servidores</h1>
+            <p class="subtitle">Tabla de conexiones y estados</p>
+        </header>
+
+        <div class="table-section">
+            <table class="communication-table" id="communicationTable">
+                <thead>
+                    <tr>
+                        <th>Servidor Origen</th>
+                        <th>Servidor Destino</th>
+                        <th>Estatus</th>
+                        <th>Latencia (ms)</th>
+                        <th>Hora</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
