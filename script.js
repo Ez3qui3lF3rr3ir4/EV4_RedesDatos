@@ -24,6 +24,10 @@ function renderTable() {
         const toCell = document.createElement('td');
         toCell.textContent = connection.to;
         
+        // Celda de IP
+        const ipCell = document.createElement('td');
+        ipCell.textContent = connection.ip || 'N/A';
+        
         // Celda de estatus
         const statusCell = document.createElement('td');
         statusCell.innerHTML = `
@@ -43,6 +47,7 @@ function renderTable() {
         
         row.appendChild(fromCell);
         row.appendChild(toCell);
+        row.appendChild(ipCell);
         row.appendChild(statusCell);
         row.appendChild(latencyCell);
         row.appendChild(timeCell);
@@ -71,6 +76,7 @@ async function fetchApiData() {
         const newConnection = {
             from: 'Nginx (LB)', // Origen aparente de la petición o balanceador
             to: serverName,      // Servidor backend que procesó la petición
+            ip: data.ip,         // IP del servidor backend
             status: data.status === 'OK' ? STATUS.STABLE : STATUS.ERROR,
             latency: latency,
             // Forzamos que se muestren los segundos
@@ -94,6 +100,7 @@ async function fetchApiData() {
         const errorConnection = {
             from: 'Nginx (LB)',
             to: 'API / Desconocido',
+            ip: 'Desconocida',
             status: STATUS.ERROR,
             latency: latency,
             time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
