@@ -7,7 +7,6 @@ tests/
 html/
 logs/
 temp/
-app.py
 nginx.exe
 README.md
 start_servers.bat
