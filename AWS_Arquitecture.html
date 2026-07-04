@@ -367,7 +367,7 @@ svg#connections {
     <div class="aws-boundary">
         <div class="boundary-label">
             <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h.71C7.37 7.69 9.48 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3s-1.34 3-3 3z"/></svg>
-            AWS Cloud
+            AWS Cloud - Región: us-east-1 (N. Virginia)
         </div>
         
         <div class="row">
@@ -388,7 +388,7 @@ svg#connections {
 
             <!-- Subred Pública -->
             <div class="subnet-boundary public">
-                <div class="boundary-label">Subredes Públicas (public-1: 10.0.1.0/24, public-2: 10.0.2.0/24)</div>
+                <div class="boundary-label">Subredes Públicas (public-1 [us-east-1a], public-2 [us-east-1b])</div>
                 <div class="ec2-group">
                     
                     <div class="card bastion" id="bastion-card">
@@ -397,7 +397,7 @@ svg#connections {
                             <div class="name">Bastion Host</div>
                         </div>
                         <div class="card-details">
-                            <div><strong>Nombre:</strong> bastion-host</div>
+                            <div><strong>AZ:</strong> us-east-1a</div>
                             <div><strong>Subnet:</strong> public-1</div>
                             <div><strong>Public IP:</strong> Enabled</div>
                             <div><strong>Key:</strong> vockey.pem</div>
@@ -415,8 +415,8 @@ svg#connections {
                             <div class="name">Application Load Balancer (alb-api)</div>
                         </div>
                         <div class="card-details">
-                            <div><strong>Scheme:</strong> Internet-facing</div>
-                            <div><strong>Subnets:</strong> public-1 + public-2</div>
+                            <div><strong>AZs:</strong> us-east-1a, us-east-1b</div>
+                            <div><strong>Subnets:</strong> public-1, public-2</div>
                             <div><strong>Listener (80):</strong> Forward a tg-api</div>
                         </div>
                         <div class="tooltip">
@@ -434,6 +434,7 @@ svg#connections {
                             <div class="name">NAT Gateway</div>
                         </div>
                         <div class="card-details">
+                            <div><strong>AZ:</strong> us-east-1a</div>
                             <div><strong>Subnet:</strong> public-1</div>
                             <div><strong>Elastic IP:</strong> Sí</div>
                             <div><strong>RT Privada:</strong> 0.0.0.0/0 -> NAT</div>
@@ -445,7 +446,7 @@ svg#connections {
 
             <!-- Subred Privada -->
             <div class="subnet-boundary private">
-                <div class="boundary-label">Subredes Privadas (private-1: 10.0.3.0, private-2: 10.0.4.0, private-3: 10.0.5.0)</div>
+                <div class="boundary-label">Subredes Privadas (private-1 [us-east-1a], private-2 [us-east-1b], private-3 [us-east-1a])</div>
                 
                 <div class="target-group-boundary">
                     <div class="boundary-label tg-label">Target Group: tg-api (Port 5000)</div>
@@ -457,8 +458,8 @@ svg#connections {
                             <div class="name">EC2 API 1</div>
                         </div>
                         <div class="card-details">
-                            <div><strong>AMI:</strong> Amazon Linux 2</div>
-                            <div><strong>Subnet:</strong> private-1 (10.0.3.X)</div>
+                            <div><strong>AZ:</strong> us-east-1a</div>
+                            <div><strong>Subnet:</strong> private-1 (10.0.3.0)</div>
                             <div><strong>Public IP:</strong> NO</div>
                             <div><strong>App:</strong> Flask (Puerto 5000)</div>
                             <div><strong>Estado:</strong> <span class="status-indicator" id="ec2-1-status"></span></div>
@@ -477,8 +478,8 @@ svg#connections {
                             <div class="name">EC2 API 2</div>
                         </div>
                         <div class="card-details">
-                            <div><strong>AMI:</strong> Amazon Linux 2</div>
-                            <div><strong>Subnet:</strong> private-2 (10.0.4.X)</div>
+                            <div><strong>AZ:</strong> us-east-1b</div>
+                            <div><strong>Subnet:</strong> private-2 (10.0.4.0)</div>
                             <div><strong>Public IP:</strong> NO</div>
                             <div><strong>App:</strong> Flask (Puerto 5000)</div>
                             <div><strong>Estado:</strong> <span class="status-indicator" id="ec2-2-status"></span></div>
@@ -497,8 +498,8 @@ svg#connections {
                             <div class="name">EC2 API 3</div>
                         </div>
                         <div class="card-details">
-                            <div><strong>AMI:</strong> Amazon Linux 2</div>
-                            <div><strong>Subnet:</strong> private-3 (10.0.5.X)</div>
+                            <div><strong>AZ:</strong> us-east-1a</div>
+                            <div><strong>Subnet:</strong> private-3 (10.0.5.0)</div>
                             <div><strong>Public IP:</strong> NO</div>
                             <div><strong>App:</strong> Flask (Puerto 5000)</div>
                             <div><strong>Estado:</strong> <span class="status-indicator" id="ec2-3-status"></span></div>

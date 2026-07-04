@@ -1,0 +1,41 @@
+#!/bin/bash
+# 1. Actualizar el sistema e instalar Python 3
+yum update -y
+yum install -y python3
+
+# 2. Instalar las dependencias de tu API (Flask y CORS)
+pip3 install flask flask-cors
+
+# 3. Moverse al directorio del usuario por defecto
+cd /home/ec2-user
+
+# 4. Crear el archivo app.py con tu código exacto
+cat << 'EOF' > app.py
+from flask import Flask, jsonify
+from flask_cors import CORS
+import socket
+from datetime import datetime
+import sys
+
+app = Flask(__name__)
+CORS(app) # Habilita peticiones cruzadas (necesario para GitHub Pages)
+
+# Obtener puerto desde los argumentos (por defecto 5000 según tu arquitectura)
+port = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({
+        "server_name": f"{socket.gethostname()} (Puerto {port})",
+        "ip": socket.gethostbyname(socket.gethostname()),
+        "status": "OK",
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "port": port
+    }), 200
+
+if __name__ =="__main__":
+    app.run(host="0.0.0.0", port=port, debug=False)
+EOF
+
+# 5. Ejecutar la API en segundo plano para que siga viva
+nohup python3 app.py > api_log.txt 2>&1 &

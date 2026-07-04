@@ -61,7 +61,7 @@ async function fetchApiData() {
     const startTime = performance.now();
     try {
         // Añadimos '?t=...' para evitar que el navegador guarde la respuesta en caché
-        const response = await fetch('http://localhost/health?t=' + Date.now());
+        const response = await fetch('http://alb-api-1645252635.us-east-1.elb.amazonaws.com/health?t=' + Date.now());
         
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
@@ -74,7 +74,7 @@ async function fetchApiData() {
         const serverName = data.server_name;
         
         const newConnection = {
-            from: 'Nginx (LB)', // Origen aparente de la petición o balanceador
+            from: 'AWS ALB', // Origen aparente de la petición o balanceador
             to: serverName,      // Servidor backend que procesó la petición
             ip: data.ip,         // IP del servidor backend
             status: data.status === 'OK' ? STATUS.STABLE : STATUS.ERROR,
@@ -98,7 +98,7 @@ async function fetchApiData() {
         const latency = Math.round(performance.now() - startTime);
         
         const errorConnection = {
-            from: 'Nginx (LB)',
+            from: 'AWS ALB',
             to: 'API / Desconocido',
             ip: 'Desconocida',
             status: STATUS.ERROR,
