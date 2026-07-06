@@ -1,15 +1,16 @@
 #!/bin/bash
-# 1. Actualizar el sistema e instalar Python 3
+
+# Actualizar e instalar Python
 yum update -y
 yum install -y python3 python3-pip
 
-# 2. Instalar las dependencias de tu API (Flask y CORS)
-pip3 install flask flask-cors
+# Instalar dependencias
+python3 -m pip install flask flask-cors
 
-# 3. Moverse al directorio del usuario por defecto
+# Ir al directorio del usuario
 cd /home/ec2-user
 
-# 4. Crear el archivo app.py con tu código exacto
+# Crear la API
 cat << 'EOF' > app.py
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -18,9 +19,8 @@ from datetime import datetime
 import sys
 
 app = Flask(__name__)
-CORS(app) # Habilita peticiones cruzadas (necesario para GitHub Pages)
+CORS(app)
 
-# Obtener puerto desde los argumentos (por defecto 5000 según tu arquitectura)
 port = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
 
 @app.route("/health", methods=["GET"])
@@ -33,9 +33,31 @@ def health():
         "port": port
     }), 200
 
-if __name__ =="__main__":
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=port, debug=False)
 EOF
 
-# 5. Ejecutar la API en segundo plano para que siga viva
-nohup python3 app.py > api_log.txt 2>&1 &
+# Asignar permisos al usuario
+chown ec2-user:ec2-user /home/ec2-user/app.py
+
+# Crear el servicio
+cat << 'EOF' > /etc/systemd/system/api.service
+[Unit]
+Description=Flask API
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user
+ExecStart=/usr/bin/python3 /home/ec2-user/app.py 5000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Activar el servicio
+systemctl daemon-reload
+systemctl enable api
+systemctl start api
